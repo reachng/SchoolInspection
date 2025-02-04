@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Inspection Form</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --background-color: #f0f4f8;
+            --form-bg: #ffffff;
+            --text-color: #1f2937;
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            padding: 0 1rem;
+        }
+
+        h2 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 2.25rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+        }
+
+        .form-container {
+            background-color: var(--form-bg);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .enroll-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: 0;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            padding: 12px 24px;
+            transition: var(--transition);
+            z-index: 999;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .enroll-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 20px -3px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-control {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        .col-form-label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 1rem;
+        }
+
+        .form-section {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        .form-section-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 1rem 2.5rem;
+            font-weight: 600;
+            transition: var(--transition);
+            color: white;
+            min-width: 200px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .custom-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .custom-checkbox input[type="checkbox"] {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 6px;
+            border: 2px solid #d1d5db;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .autosave-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            font-size: 0.875rem;
+            display: none;
+            z-index: 1000;
+        }
+
+        .floating-help {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .floating-help:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.5rem;
+            }
+
+            .form-container {
+                padding: 1.5rem;
+            }
+
+            .enroll-button {
+                position: static;
+                width: 100%;
+                margin-bottom: 1rem;
+                justify-content: center;
+            }
+
+            .form-section {
+                padding: 1rem;
+            }
+
+            h2 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% load custom_filters %}
+
+    <div class="page-header">
+        <div class="container text-center">
+            <h2><i class="fas fa-clipboard-check me-2"></i>Professional Inspection Form</h2>
+            <p class="subtitle">Complete and accurate inspections for better facilities management</p>
+        </div>
+    </div>
+
+    <a href="{% url 'inspection_step' step=1 %}" class="enroll-button">
+        <i class="fas fa-plus"></i>
+        Enroll Inspection
+    </a>
+
+    <div class="container">
+        <div class="form-container">
+            <div class="form-section">
+                <div class="form-section-title">
+                    <i class="fas fa-search"></i>
+                    Load Existing Inspection
+                </div>
+                <form method="GET" action="{% url 'inspection_form' %}" class="mb-4">
+                    <div class="row align-items-center">
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="sf_code" name="sf_code" value="{{ sf_code }}" placeholder="Enter SF Code">
+                        </div>
+                        <div class="col-sm-4">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-search me-2"></i>Load Data
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <form id="inspection-form" method="POST" enctype="multipart/form-data" data-save-url="{% url 'autosave_inspection' %}">
+                {% csrf_token %}
+                
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <i class="fas fa-building"></i>
+                        School Information
+                    </div>
+                    <div class="row mb-3">
+                        <label for="school_name" class="col-sm-3 col-form-label">School Name</label>
+                        <div class="col-sm-9">
+                            {{ form.school_name|add_class:"form-control" }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="sf_code" class="col-sm-3 col-form-label">SF Code</label>
+                        <div class="col-sm-9">
+                            {{ form.sf_code|add_class:"form-control" }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="inspector_name" class="col-sm-3 col-form-label">Inspector Name</label>
+                        <div class="col-sm-9">
+                            {{ form.inspector_name|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <i class="fas fa-tasks"></i>
+                        Inspection Questions
+                    </div>
+                    <div class="row mb-3">
+                        <label for="question_1" class="col-sm-3 col-form-label">How is the curriculum being implemented, and how does it align with national standards?</label>
+                        <div class="col-sm-9">
+                            {{ form.question_1|add_class:"form-control" }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="question_2" class="col-sm-3 col-form-label">What strategies are in place to ensure student engagement and learning outcomes?</label>
+                        <div class="col-sm-9">
+                            {{ form.question_2|add_class:"form-control" }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="question_3" class="col-sm-3 col-form-label">How do teachers integrate technology into their lessons?</label>
+                        <div class="col-sm-9">
+                            {{ form.question_3|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="question_4" class="col-sm-3 col-form-label">How is student progress monitored and reported to parents?</label>
+                        <div class="col-sm-9">
+                            {{ form.question_4|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="question_5" class="col-sm-3 col-form-label">How is discipline maintained in the school?</label>
+                        <div class="col-sm-9">
+                            {{ form.question_5|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="question_6" class="col-sm-3 col-form-label">Is there a policy in place for emergency situations?</label>
+                        <div class="col-sm-9">
+                            {{ form.question_6|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="question_7" class="col-sm-3 col-form-label">What strategies are in place to ensure student engagement and learning outcomes?</label>
+                        <div class="col-sm-9">
+                            {{ form.question_7|add_class:"form-control" }}
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <i class="fas fa-camera"></i>
+                        Documentation
+                    </div>
+                    <div class="row mb-3">
+                        <label for="photo" class="col-sm-3 col-form-label">Upload Photo</label>
+                        <div class="col-sm-9">
+                            {{ form.photo|add_class:"form-control" }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-3">Status</div>
+                        <div class="col-sm-9">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="completed" name="completed" {{ form.instance.completed|yesno:"checked," }}>
+                                Mark as Completed
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane me-2"></i>Submit Inspection
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="floating-help">
+        <i class="fas fa-question-circle fa-2x text-primary"></i>
+    </div>
+
+    <div class="autosave-indicator">
+        <i class="fas fa-save me-2"></i>Form autosaved
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('#inspection-form');
+            const saveUrl = form.dataset.saveUrl;
+            const autosaveIndicator = document.querySelector('.autosave-indicator');
+
+            function showAutosaveIndicator() {
+                autosaveIndicator.style.display = 'block';
+                setTimeout(() => {
+                    autosaveIndicator.style.display = 'none';
+                }, 2000);
+            }
+
+            setInterval(() => {
+                const formData = new FormData(form);
+                fetch(saveUrl, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    },
+                }).then(response => {
+                    if (response.ok) {
+                        showAutosaveIndicator();
+                    } else {
+                        console.error('Autosave failed');
+                    }
+                });
+            }, 60000);
+
+            // Add smooth scroll behavior
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Add form validation
+            form.addEventListener('submit', function(e) {
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
